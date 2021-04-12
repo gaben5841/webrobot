@@ -97,8 +97,10 @@ class StreamingHandler(BaseHTTPRequestHandler):
         post_data = post_data.split("=")[1]  # Only keep the value
 
         driveBot(post_data)
+        post_data = " "
+        self._redirect("/")
 
-
+8
 class StreamingServer(socketserver.ThreadingMixIn, HTTPServer):
     allow_reuse_address = True
     daemon_threads = True
