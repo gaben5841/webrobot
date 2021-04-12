@@ -71,22 +71,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                     self.end_headers()
                     self.wfile.write(frame)
                     self.wfile.write(b'\r\n')
-                    content_length = int(self.headers['Content-Length'])  # Get the size of data
-                    post_data = self.rfile.read(content_length).decode("utf-8")  # Get the data
-                    post_data = post_data.split("=")[1]  # Only keep the value
 
-                    if post_data == "w":
-                        print(post_data)
-                        self._redirect('/')
-                    elif post_data == "a":
-                        print(post_data)
-                        self._redirect('/')
-                    elif post_data == "s":
-                        print(post_data)
-                        self._redirect('/')
-                    elif post_data == "d":
-                        print(post_data)
-                        self._redirect('/')
             except Exception as e:
                 logging.warning(
                     'Removed streaming client %s: %s',
@@ -94,6 +79,24 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
         else:
             self.send_error(404)
             self.end_headers()
+
+    def do_POST(self):
+        content_length = int(self.headers['Content-Length'])  # Get the size of data
+        post_data = self.rfile.read(content_length).decode("utf-8")  # Get the data
+        post_data = post_data.split("=")[1]  # Only keep the value
+
+        if post_data == "w":
+            print(post_data)
+            self._redirect('/')
+        elif post_data == "a":
+            print(post_data)
+            self._redirect('/')
+        elif post_data == "s":
+            print(post_data)
+            self._redirect('/')
+        elif post_data == "d":
+            print(post_data)
+            self._redirect('/')
 
 class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
     allow_reuse_address = True
