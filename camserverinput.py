@@ -4,6 +4,7 @@ import logging
 import socketserver
 from threading import Condition
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from robotDrive import driveBot
 
 PAGE = """\
 <html>
@@ -81,8 +82,8 @@ class StreamingHandler(BaseHTTPRequestHandler):
         else:
             self.send_error(404)
             self.end_headers()
-            
-            
+
+
     def _redirect(self, path):
         self.send_response(303)
         self.send_header('Content-type', 'text/html')
@@ -95,21 +96,10 @@ class StreamingHandler(BaseHTTPRequestHandler):
         post_data = self.rfile.read(content_length).decode("utf-8")  # Get the data
         post_data = post_data.split("=")[1]  # Only keep the value
 
-        if post_data == "w":
-            print(post_data)
-            self._redirect('/')
-        elif post_data == "a":
-            print(post_data)
-            self._redirect('/')
-        elif post_data == "s":
-            print(post_data)
-            self._redirect('/')
-        elif post_data == "d":
-            print(post_data)
-            self._redirect('/')
+        driveBot(post_data)
 
 
-class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
+class StreamingServer(socketserver.ThreadingMixIn, HTTPServer):
     allow_reuse_address = True
     daemon_threads = True
 
