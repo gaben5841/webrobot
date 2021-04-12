@@ -3,9 +3,9 @@ import picamera
 import logging
 import socketserver
 from threading import Condition
-from http import server
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
-PAGE="""\
+PAGE = """\
 <html>
     <head>
         <title>Raspberry Pi - Surveillance Camera</title>
@@ -22,6 +22,7 @@ PAGE="""\
     </body>
 </html>
 """
+
 
 class StreamingOutput(object):
     def __init__(self):
@@ -40,7 +41,8 @@ class StreamingOutput(object):
             self.buffer.seek(0)
         return self.buffer.write(buf)
 
-class StreamingHandler(server.BaseHTTPRequestHandler):
+
+class StreamingHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/':
             self.send_response(301)
@@ -79,6 +81,14 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
         else:
             self.send_error(404)
             self.end_headers()
+            
+            
+    def _redirect(self, path):
+        self.send_response(303)
+        self.send_header('Content-type', 'text/html')
+        self.send_header('Location', path)
+        self.end_headers()
+
 
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])  # Get the size of data
@@ -98,14 +108,16 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             print(post_data)
             self._redirect('/')
 
+
 class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
     allow_reuse_address = True
     daemon_threads = True
 
+
 with picamera.PiCamera(resolution='640x480', framerate=24) as camera:
     output = StreamingOutput()
-    #Uncomment the next line to change your Pi's Camera rotation (in degrees)
-    #camera.rotation = 90
+    # Uncomment the next line to change your Pi's Camera rotation (in degrees)
+    # camera.rotation = 90
     camera.start_recording(output, format='mjpeg')
     try:
         address = ('', 8000)
