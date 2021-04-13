@@ -4,7 +4,7 @@ import logging
 import socketserver
 from threading import Condition
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from robotDrive import driveBot
+from robotdrive import driveBot
 
 PAGE = """\
 <html>
@@ -19,6 +19,7 @@ PAGE = """\
             <input type="submit" name="left" value="a">
             <input type="submit" name="backward" value="s">
             <input type="submit" name="right" value="d">
+            <input type="submit" name="stop" value="STOP">
         </form>
     </body>
 </html>
