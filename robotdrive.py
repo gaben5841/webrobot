@@ -1,5 +1,5 @@
 from Raspi_MotorHAT import Raspi_MotorHAT
-import keyboard
+#import keyboard
 
 mh = Raspi_MotorHAT(addr=0x6f)
 lmotor = mh.getMotor(1)
@@ -10,26 +10,26 @@ rmotor = mh.getMotor(2)
 def driveBot(buttonInput):
 
     if buttonInput == "w":
-        lmotor.run(Raspi_MotorHAT.FORWARD)
+        lmotor.run(Raspi_MotorHAT.BACKWARD)
         rmotor.run(Raspi_MotorHAT.FORWARD)
         lmotor.setSpeed(100)
         rmotor.setSpeed(100)
     elif buttonInput == "s":
-        lmotor.run(Raspi_MotorHAT.BACKWARD)
-        rmotor.run(Raspi_MotorHAT.BACKWARD)
-        lmotor.setSpeed(100)
-        rmotor.setSpeed(100)
-    elif buttonInput == "a":
         lmotor.run(Raspi_MotorHAT.FORWARD)
         rmotor.run(Raspi_MotorHAT.BACKWARD)
         lmotor.setSpeed(100)
         rmotor.setSpeed(100)
-    elif buttonInput == "d":
+    elif buttonInput == "a":
         lmotor.run(Raspi_MotorHAT.BACKWARD)
+        rmotor.run(Raspi_MotorHAT.BACKWARD)
+        lmotor.setSpeed(100)
+        rmotor.setSpeed(100)
+    elif buttonInput == "d":
+        lmotor.run(Raspi_MotorHAT.FORWARD)
         rmotor.run(Raspi_MotorHAT.FORWARD)
         lmotor.setSpeed(100)
         rmotor.setSpeed(100)
-    else:
+    elif buttonInput == "STOP":
         lmotor.setSpeed(0)
         rmotor.setSpeed(0)
 
